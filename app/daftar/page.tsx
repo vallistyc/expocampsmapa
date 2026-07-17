@@ -265,24 +265,24 @@ export default function Page() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(250,204,21,0.16),_transparent_30%),linear-gradient(135deg,_#040404_0%,_#0a0a0a_45%,_#020202_100%)] px-4 py-10 text-slate-100 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(250,204,21,0.16),_transparent_30%),linear-gradient(135deg,_#040404_0%,_#0a0a0a_45%,_#020202_100%)] px-3 py-6 text-slate-100 sm:px-6 sm:py-10 lg:px-8">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute left-[-8%] top-24 h-56 w-56 rounded-full bg-yellow-500/20 blur-3xl" />
         <div className="absolute bottom-24 right-[-5%] h-44 w-44 rounded-full bg-white/10 blur-3xl" />
       </div>
-      <div className="relative mx-auto flex max-w-4xl flex-col gap-6 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:p-8">
+      <div className="relative mx-auto flex max-w-4xl flex-col gap-5 rounded-[1.5rem] border border-white/10 bg-white/5 p-4 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:gap-6 sm:rounded-[2rem] sm:p-6 lg:p-8">
         <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-yellow-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-yellow-400 sm:text-sm">
             Pendaftaran Anggota
           </p>
-          <h1 className="text-3xl font-semibold text-white">Form Pendaftaran</h1>
-          <p className="text-sm text-zinc-400">
+          <h1 className="text-2xl font-semibold text-white sm:text-3xl">Form Pendaftaran</h1>
+          <p className="text-sm leading-6 text-zinc-400">
             Semua field wajib diisi, kecuali portofolio desain yang hanya diwajibkan untuk divisi PDD.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 font-poppins">
-          <div className="grid gap-4 md:grid-cols-2">
+        <form onSubmit={handleSubmit} className="space-y-5 font-poppins sm:space-y-6">
+          <div className="grid gap-4 sm:grid-cols-2">
             <label className="space-y-2 text-sm">
               <span className="font-medium">
                 Nama Lengkap <span className="text-rose-400">*</span>
@@ -292,7 +292,7 @@ export default function Page() {
                 name="fullName"
                 value={form.fullName}
                 onChange={handleInputChange}
-                className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-white outline-none ring-0 transition focus:border-yellow-400"
+                className="w-full min-w-0 rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-base text-white outline-none ring-0 transition focus:border-yellow-400"
                 placeholder="Contoh: Budi Santoso"
               />
               {errors.fullName ? <p className="text-sm text-rose-400">{errors.fullName}</p> : null}
@@ -307,7 +307,7 @@ export default function Page() {
                 name="whatsapp"
                 value={form.whatsapp}
                 onChange={handleInputChange}
-                className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-white outline-none transition focus:border-yellow-400"
+                className="w-full min-w-0 rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-base text-white outline-none transition focus:border-yellow-400"
                 placeholder="08xxxxxxxxxx"
               />
               {errors.whatsapp ? <p className="text-sm text-rose-400">{errors.whatsapp}</p> : null}
@@ -322,7 +322,7 @@ export default function Page() {
               name="angkatan"
               value={form.angkatan}
               onChange={handleInputChange}
-              className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 mb-7 text-white outline-none transition focus:border-yellow-400"
+              className="mb-2 w-full min-w-0 rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-base text-white outline-none transition focus:border-yellow-400"
             >
               <option value="">Pilih angkatan</option>
               {batchOptions.map((option) => (
@@ -334,7 +334,7 @@ export default function Page() {
             {errors.angkatan ? <p className="text-sm text-rose-400">{errors.angkatan}</p> : null}
           </label>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <label className="space-y-2 text-sm">
               <span className="font-medium">
                 KTM / Bukti Diterima di Perguruan Tinggi <span className="text-rose-400">*</span>
@@ -343,7 +343,7 @@ export default function Page() {
                 type="file"
                 accept="image/*"
                 onChange={(event) => handleFileChange("ktmFile", event)}
-                className="w-full rounded-xl border border-dashed border-white/20 bg-black/40 px-4 py-3 text-zinc-300"
+                className="w-full min-w-0 rounded-xl border border-dashed border-white/20 bg-black/40 px-4 py-3 text-sm text-zinc-300 file:mr-3 file:rounded-full file:border-0 file:bg-yellow-500/20 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-yellow-300"
               />
               {files.ktmFile ? (
                 <p className="text-xs text-slate-400">Terpilih: {files.ktmFile.name}</p>
@@ -359,7 +359,7 @@ export default function Page() {
                 type="file"
                 accept="image/*"
                 onChange={(event) => handleFileChange("photoFile", event)}
-                className="w-full rounded-xl border border-dashed border-white/20 bg-black/40 px-4 py-3 text-zinc-300"
+                className="w-full min-w-0 rounded-xl border border-dashed border-white/20 bg-black/40 px-4 py-3 text-sm text-zinc-300 file:mr-3 file:rounded-full file:border-0 file:bg-yellow-500/20 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-yellow-300"
               />
               {files.photoFile ? (
                 <p className="text-xs text-slate-400">Terpilih: {files.photoFile.name}</p>
@@ -369,11 +369,11 @@ export default function Page() {
           </div>
 
           {form.angkatan ? (
-            <div className="space-y-3 rounded-2xl border border-white/10 bg-black/30 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div>
+            <div className="space-y-3 rounded-2xl border border-white/10 bg-black/30 p-3 sm:p-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
                   <h2 className="font-medium">Pilihan Divisi Berdasarkan Prioritas</h2>
-                  <p className="text-sm text-slate-400">
+                  <p className="mt-1 text-sm leading-6 text-slate-400">
                     Pilih minimal 3 divisi, urutkan dari prioritas tertinggi ke terendah. Divisi khusus angkatan 2026 akan disembunyikan saat memilih 2025.
                   </p>
                 </div>
@@ -381,7 +381,7 @@ export default function Page() {
                   type="button"
                   onClick={addDivisionRow}
                   disabled={divisionRows.length >= visibleDivisionOptions.length}
-                  className="rounded-lg border border-yellow-500/40 bg-yellow-500/10 px-3 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="w-full rounded-lg border border-yellow-500/40 bg-yellow-500/10 px-3 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                 >
                   + Tambah divisi
                 </button>
@@ -395,7 +395,7 @@ export default function Page() {
 
                   return (
                     <div key={row.id} className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-3 sm:flex-row sm:items-end">
-                      <label className="flex-1 space-y-2 text-sm">
+                      <label className="flex-1 min-w-0 space-y-2 text-sm">
                         <span className="font-medium">Prioritas {index + 1}</span>
                         <select
                           value={row.value}
@@ -415,7 +415,7 @@ export default function Page() {
                         </select>
                       </label>
 
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
                         <button
                           type="button"
                           onClick={() => moveDivisionRow(row.id, -1)}
@@ -457,7 +457,7 @@ export default function Page() {
               type="file"
               accept="image/*"
               onChange={(event) => handleFileChange("portfolioFile", event)}
-              className="w-full rounded-xl border border-dashed border-white/20 bg-black/40 px-4 py-3 text-zinc-300"
+              className="w-full min-w-0 rounded-xl border border-dashed border-white/20 bg-black/40 px-4 py-3 text-sm text-zinc-300 file:mr-3 file:rounded-full file:border-0 file:bg-yellow-500/20 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-yellow-300"
             />
             {files.portfolioFile ? (
               <p className="text-xs text-slate-400">Terpilih: {files.portfolioFile.name}</p>
@@ -471,7 +471,7 @@ export default function Page() {
           </label>
 
           <div className="flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
+            <div className="min-w-0">
               {submitted ? (
                 <p className="text-sm font-medium text-emerald-400">
                   Form berhasil disubmit. Data sudah dikirim ke tim.
@@ -482,7 +482,7 @@ export default function Page() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-10 cursor-pointer rounded-full border border-yellow-500 bg-yellow-500 px-6 py-3 text-sm font-semibold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full cursor-pointer rounded-full border border-yellow-500 bg-yellow-500 px-6 py-3 text-sm font-semibold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-60 sm:mt-0 sm:w-auto"
             >
               {isSubmitting ? "Mengirim..." : "Kirim Pendaftaran"}
             </button>
