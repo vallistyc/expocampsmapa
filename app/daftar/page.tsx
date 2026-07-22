@@ -83,7 +83,6 @@ export default function Page() {
   const [divisionRows, setDivisionRows] = useState<DivisionRow[]>([
     createDivisionRow(1),
     createDivisionRow(2),
-    createDivisionRow(3),
   ]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -136,23 +135,6 @@ export default function Page() {
     );
   };
 
-  const addDivisionRow = () => {
-    setDivisionRows((prev) => {
-      if (prev.length >= visibleDivisionOptions.length) {
-        return prev;
-      }
-
-      return [...prev, createDivisionRow(Date.now() + Math.random())];
-    });
-  };
-
-  const removeDivisionRow = (id: number) => {
-    setDivisionRows((prev) => {
-      if (prev.length <= 3) return prev;
-      return prev.filter((row) => row.id !== id);
-    });
-  };
-
   const moveDivisionRow = (id: number, direction: -1 | 1) => {
     setDivisionRows((prev) => {
       const index = prev.findIndex((row) => row.id === id);
@@ -200,8 +182,8 @@ export default function Page() {
 
     if (duplicateDivisions.length > 0) {
       nextErrors.divisions = "Setiap divisi hanya boleh dipilih satu kali.";
-    } else if (uniqueDivisions.size < 3) {
-      nextErrors.divisions = "Pilih minimal 3 divisi yang berbeda.";
+    } else if (selectedDivisions.length < 2 || uniqueDivisions.size < 2) {
+      nextErrors.divisions = "Pilih 2 divisi yang berbeda.";
     }
 
     if (isPddSelected && !files.portfolioFile) {
@@ -254,7 +236,7 @@ export default function Page() {
       setSubmitted(true);
       setForm({ fullName: "", whatsapp: "", angkatan: "" });
       setFiles({ ktmFile: null, portfolioFile: null, photoFile: null });
-      setDivisionRows([createDivisionRow(1), createDivisionRow(2), createDivisionRow(3)]);
+      setDivisionRows([createDivisionRow(1), createDivisionRow(2)]);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Kesalahan tidak diketahui.";
       setErrors({ submit: `Gagal mengirim data: ${message}` });
@@ -272,10 +254,20 @@ export default function Page() {
       </div>
       <div className="relative mx-auto flex max-w-4xl flex-col gap-5 rounded-[1.5rem] border border-white/10 bg-white/5 p-4 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:gap-6 sm:rounded-[2rem] sm:p-6 lg:p-8">
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-yellow-400 sm:text-sm">
-            Pendaftaran Anggota
-          </p>
-          <h1 className="text-2xl font-semibold text-white sm:text-3xl">Form Pendaftaran</h1>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-yellow-400 sm:text-sm">
+                Pendaftaran Anggota
+              </p>
+              <h1 className="text-2xl font-semibold text-white sm:text-3xl">Form Pendaftaran</h1>
+            </div>
+            <a
+              href="/"
+              className="inline-flex items-center justify-center rounded-full border border-yellow-500/40 bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20"
+            >
+              Kembali ke Beranda
+            </a>
+          </div>
           <p className="text-sm leading-6 text-zinc-400">
             Semua field wajib diisi, kecuali portofolio desain yang hanya diwajibkan untuk divisi PDD.
           </p>
@@ -370,21 +362,11 @@ export default function Page() {
 
           {form.angkatan ? (
             <div className="space-y-3 rounded-2xl border border-white/10 bg-black/30 p-3 sm:p-4">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0">
-                  <h2 className="font-medium">Pilihan Divisi Berdasarkan Prioritas</h2>
-                  <p className="mt-1 text-sm leading-6 text-slate-400">
-                    Pilih minimal 3 divisi, urutkan dari prioritas tertinggi ke terendah. Divisi khusus angkatan 2026 akan disembunyikan saat memilih 2025.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={addDivisionRow}
-                  disabled={divisionRows.length >= visibleDivisionOptions.length}
-                  className="w-full rounded-lg border border-yellow-500/40 bg-yellow-500/10 px-3 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
-                >
-                  + Tambah divisi
-                </button>
+              <div className="min-w-0">
+                <h2 className="font-medium">Pilihan Divisi Berdasarkan Prioritas</h2>
+                <p className="mt-1 text-sm leading-6 text-slate-400">
+                  Pilih 2 divisi yang berbeda. Divisi khusus angkatan 2026 akan disembunyikan saat memilih 2025.
+                </p>
               </div>
 
               <div className="space-y-3">
@@ -432,14 +414,6 @@ export default function Page() {
                         >
                           ↓
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => removeDivisionRow(row.id)}
-                          disabled={divisionRows.length <= 3}
-                          className="rounded-lg border border-rose-500/30 px-3 py-2 text-sm text-rose-300 transition disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          Hapus
-                        </button>
                       </div>
                     </div>
                   );
@@ -449,26 +423,24 @@ export default function Page() {
             </div>
           ) : null}
 
-          <label className="space-y-2 text-sm">
-            <span className="font-medium">
-              Portofolio Desain {isPddSelected ? <span className="text-rose-400">*</span> : null}
-            </span>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(event) => handleFileChange("portfolioFile", event)}
-              className="w-full min-w-0 rounded-xl border border-dashed border-white/20 bg-black/40 px-4 py-3 text-sm text-zinc-300 file:mr-3 file:rounded-full file:border-0 file:bg-yellow-500/20 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-yellow-300"
-            />
-            {files.portfolioFile ? (
-              <p className="text-xs text-slate-400">Terpilih: {files.portfolioFile.name}</p>
-            ) : null}
-            {errors.portfolioFile ? <p className="text-sm text-rose-400">{errors.portfolioFile}</p> : null}
-            <p className="text-xs text-slate-400">
-              {isPddSelected
-                ? "Portofolio desain wajib diunggah karena divisi PDD dipilih."
-                : "Portofolio desain opsional jika divisi PDD tidak dipilih."}
-            </p>
-          </label>
+          {isPddSelected ? (
+            <label className="space-y-2 text-sm">
+              <span className="font-medium">Portofolio Desain (Opsional)</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => handleFileChange("portfolioFile", event)}
+                className="w-full min-w-0 rounded-xl border border-dashed border-white/20 bg-black/40 px-4 py-3 text-sm text-zinc-300 file:mr-3 file:rounded-full file:border-0 file:bg-yellow-500/20 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-yellow-300"
+              />
+              {files.portfolioFile ? (
+                <p className="text-xs text-slate-400">Terpilih: {files.portfolioFile.name}</p>
+              ) : null}
+              {errors.portfolioFile ? <p className="text-sm text-rose-400">{errors.portfolioFile}</p> : null}
+              <p className="text-xs text-slate-400">
+                Portofolio desain wajib diunggah karena divisi PDD dipilih.
+              </p>
+            </label>
+          ) : null}
 
           <div className="flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
